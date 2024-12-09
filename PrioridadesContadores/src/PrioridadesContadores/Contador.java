@@ -10,5 +10,6 @@ public class Contador extends Thread {
            {
                suma += Math.random();
             }
+        System.out.println(getName() + " ha terminado. Valor de suma: " + suma);
        }
 }

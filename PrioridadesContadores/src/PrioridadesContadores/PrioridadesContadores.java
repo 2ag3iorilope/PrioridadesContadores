@@ -1,15 +1,17 @@
 package PrioridadesContadores;
 
 public class PrioridadesContadores {
-	   public static void main(String[] args)
-	    {
-	    System.out.println(Thread.currentThread());
-	    int nCuentas = 2;
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread());  
 
-	    Cuentas hiloCuantas = new Cuentas(nCuentas);
-	    hiloCuantas.start();
-	     }
-	}
+        int nCuentas = 2; 
+        String nombreHiloLanzador = "HiloPrincipal";  
+
+       
+        Cuentas hiloCuantas = new Cuentas(nCuentas, nombreHiloLanzador);
+        hiloCuantas.start();  
+    }
+}
 
 /**
  * Hariak kudeatzen dituen eta lehentasunek horiek gauzatzean duten eragina erakusten duen programa.

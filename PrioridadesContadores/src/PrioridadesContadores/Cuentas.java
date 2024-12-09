@@ -1,48 +1,53 @@
 package PrioridadesContadores;
 
-public class Cuentas extends Thread{
-	   private static int nCuentas;
-	   private Contador[] cuenta;
+public class Cuentas extends Thread {
+    private static int nCuentas;
+    private Contador[] cuenta;
 
-	   public Cuentas(int n)
-	   {
-	     nCuentas = n;
-	     setPriority((nCuentas+2)%Thread.MAX_PRIORITY);
-	     cuenta = new Contador[nCuentas];
-	    for (int i = 0; i < nCuentas; i++)
-	      {
-	        cuenta[i] = new Contador();
-	        cuenta[i].setPriority((i+3)%Thread.MAX_PRIORITY-1);
-	       }
-	   }
+    
+    public Cuentas(int n, String nombreHiloLanzador) {
+        nCuentas = n;  
+        setPriority((nCuentas + 2) % Thread.MAX_PRIORITY);  
+        setName(nombreHiloLanzador); 
+        cuenta = new Contador[nCuentas];
 
-	   public void run()
-	     {
-	       int i;
-	       boolean hayaHilosVivos;
+      
+        for (int i = 0; i < nCuentas; i++) {
+            cuenta[i] = new Contador();
+            cuenta[i].setPriority((i + 3) % Thread.MAX_PRIORITY - 1);
+            cuenta[i].setName("HiloContador" + i);  
+        }
+    }
 
-	       System.out.println(this.getName() + ", P-" + this.getPriority());
+    public void run() {
+        int i;
+        boolean hayaHilosVivos;
 
-	       for (i = 0; i < nCuentas; i++)
-	            cuenta[i].start();
+        System.out.println(this.getName() + ", P-" + this.getPriority());
 
-	       do
-	       {
-	         for (i = 0; i < nCuentas; i++)
-	            System.out.print(cuenta[i].getName() + ", P-" + cuenta[i].getPriority() + " " + cuenta[i].cuenta + " ");
-	         
-	         System.out.print("\r");
+      
+        for (i = 0; i < nCuentas; i++) {
+            cuenta[i].start();
+        }
 
-	         hayaHilosVivos = cuenta[0].isAlive();
-	         for (i = 1; i < nCuentas; i++)
-	              hayaHilosVivos = hayaHilosVivos || cuenta[i].isAlive();
+     
+        do {
+            for (i = 0; i < nCuentas; i++) {
+                System.out.print(cuenta[i].getName() + ", P-" + cuenta[i].getPriority() + " " + cuenta[i].cuenta + " ");
+            }
+            System.out.print("\r");
 
-	          try
-	            {
-	               int nMilisegundos = (int)(10 * Math.pow(2,nCuentas));
-	               sleep(nMilisegundos);
-	            } catch (InterruptedException e) { }
-	        }
-	        while (hayaHilosVivos);
-	     }
-	 }
+            hayaHilosVivos = cuenta[0].isAlive();
+            for (i = 1; i < nCuentas; i++) {
+                hayaHilosVivos = hayaHilosVivos || cuenta[i].isAlive();
+            }
+
+            try {
+                int nMilisegundos = (int) (10 * Math.pow(2, nCuentas));
+                sleep(nMilisegundos);
+            } catch (InterruptedException e) {}
+        } while (hayaHilosVivos);
+        
+        System.out.println("\n" + this.getName() + " ha terminado.");
+    }
+}
